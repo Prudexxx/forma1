@@ -38,29 +38,7 @@
       font-size: 16px;
       cursor: pointer;
     }
-      @media(max-width: 500px) {
-      body {
-            background-color: yellow !important;
-     
-        margin: 10px;
-        font-size: 35px; /* чуть больше шрифт на фоне формы */
-      }
-      h1 {
-        font-size: px;
-      }
-      label {
-        margin-bottom: 20px;
-        font-size: 35px;
-      }
-      input, select {
-        font-size: 30px;
-        padding: 16px;
-      }
-      button {
-        font-size: 30px;
-        padding: 18px 24px;
-      }
-    }
+
   </style>
 </head>
 <body>
@@ -199,6 +177,47 @@ function generateAndDownload() {
   const blob = htmlDocx.asBlob(htmlContent);
   saveAs(blob, `Акт_${formattedDate}.docx`);
 }
+</script>
+  <script>
+function applyResponsiveStyles() {
+  if (window.innerWidth <= 500) {
+  
+    document.body.style.margin = '10px';
+    document.body.style.fontSize = '35px';
+
+    // Можно дополнительно изменить стили элементов
+    const headers = document.querySelectorAll('h1');
+    headers.forEach(h => h.style.fontSize = '35px');
+
+    const labels = document.querySelectorAll('label');
+    labels.forEach(l => {
+      l.style.marginBottom = '20px';
+      l.style.fontSize = '45px';
+    });
+
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(i => {
+      i.style.fontSize = '40px';
+      i.style.padding = '16px';
+    });
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(b => {
+      b.style.fontSize = '40px';
+      b.style.padding = '18px 24px';
+    });
+  } else {
+    // становить исходные стили, если нужно
+    document.body.style.backgroundColor = '';
+    document.body.style.margin = '';
+    document.body.style.fontSize = '';
+    // Аналогично для других элементов
+  }
+}
+
+// Вызов при загрузке и изменении размера окна
+window.addEventListener('load', applyResponsiveStyles);
+window.addEventListener('resize', applyResponsiveStyles);
 </script>
 </body>
 </html>
