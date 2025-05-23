@@ -523,13 +523,14 @@ function updatePreview() {
   const el = document.createElement('div');
   el.innerHTML = content;
 
-  // Используем одинаковые настройки, как в downloadPdf()
-const options = {
-  html2canvas: { scale: 1, dpi: 150, useCORS: true }
-};
+  // Используем более точные параметры
+  const options = {
+    margin: 10,
+    html2canvas: { scale: 2, dpi: 300, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
 
-  // Создаем и отображаем PDF
-  html2pdf().set(options).from(el).outputPdf().then(function(pdfBlob) {
+  html2pdf().set(options).from(el).toPdf().then(function(pdfBlob) {
     const url = URL.createObjectURL(pdfBlob);
     const iframe = document.createElement('iframe');
     iframe.src = url;
