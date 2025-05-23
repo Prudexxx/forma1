@@ -7,94 +7,91 @@
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <style>
   #pdfPreview iframe {
-  width: 100%;
-  height: 80vh;
-  border: none;
-}
-body {
-  background-color: rgb(150, 78, 245);
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  font-size: 14px;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-form {
-  max-width: 600px;
-  margin: 0 auto 20px auto;
-}
-label {
-  display: block;
-  margin-top: 10px;
-}
-input, select {
-  background-color: rgb(218, 128, 125);
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-button {
-  background-color: rgb(223, 199, 68);
-  margin-top: 15px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-#pdfPreview {
-  margin-top: 20px;
-}
-/* Адаптивность таблицы для маленьких экранов */
-#itemsTable {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
-  display: block; /* чтобы появился скролл */
-}
-#itemsTable th, #itemsTable td {
-  border: 1px solid #000;
-  padding: 5px;
-  text-align: center;
-  min-width: 50px;
-}
-/* Стили для кнопки удаления - крестика */
-.deleteBtn {
-  background: none;
-  border: none;
-  color: red;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-}
-
-#discountCheckbox {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 25px;
-  height: 25px;
-  border: 2px solid #ccc;
-  border-radius: 3px;
-  background-color: rgb(218, 128, 125);
-  cursor: pointer;
-  position: relative;
-}
-#discountCheckbox:checked {
-  background-color: #1974ec;
-  border-color: #4CAF50;
-}
-#discountCheckbox:checked::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 6px;
-  width: 6px;
-  height: 12px;
-  border: solid rgb(138, 27, 27);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
+    width: 100%;
+    height: 80vh;
+    border: none;
+  }
+  body {
+    background-color: rgb(150, 78, 245);
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    font-size: 14px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  form {
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+  input, select {
+    background-color: rgb(218, 128, 125);
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: rgb(223, 199, 68);
+    margin-top: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  #pdfPreview {
+    margin-top: 20px;
+  }
+  #itemsTable {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+  }
+  #itemsTable th, #itemsTable td {
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+    min-width: 50px;
+  }
+  .deleteBtn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
+  #discountCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    background-color: rgb(218, 128, 125);
+    cursor: pointer;
+    position: relative;
+  }
+  #discountCheckbox:checked {
+    background-color: #1974ec;
+    border-color: #4CAF50;
+  }
+  #discountCheckbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 6px;
+    height: 12px;
+    border: solid rgb(138, 27, 27);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
 </style>
 </head>
 <body>
@@ -119,6 +116,7 @@ button {
     <select id="unit" required>
       <option value="т">т</option>
       <option value="м3">м3</option>
+       <option value="м3">шт</option>
     </select>
   </label>
   <label>
@@ -145,7 +143,7 @@ button {
   <!-- Форма для добавления товаров -->
   <div id="additionalItemForm" style="display:none; margin-top:10px; padding:10px; border:1px solid #ccc; font-size:13px;">
     <label>
-      <p>Наим:</p>
+      <p>Материал:</p>
       <input type="text" id="extraServiceName" placeholder="Наим" style="width:70%; display:inline-block;">
     </label>
     <label>
@@ -171,7 +169,7 @@ button {
       <thead>
         <tr>
           <th>№</th>
-          <th>Наим</th>
+          <th>Материал</th>
           <th>Кол-во</th>
           <th>Ед</th>
           <th>Сумма, руб.</th>
@@ -194,10 +192,9 @@ button {
 <div id="pdfPreview"></div>
 
 <script>
-const machineBase64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAMAAAC7m4fXAAAAclBMVEX///8AAABpaWn39/d/f3/5+fnz8/MdHR2qqqq2trbV1dVsbGxOTk5dXV3o6OghISHFxcXb29vU1NTv7+/n5+e2trbY2Ni8vLzv7+/X19cXFycnJx0dHSWlpYlJSUkJCR/f3/v7+2tra+vr4dHR3JycmZmZkRERA4ODhISEh/f3+YmJggICCKiopiYmIEBAQnJyczMzOJiYkVFRVKSkoTExMgICBLS0s6OjiYmJg4ODhpaWlZWVn4+Ph6enp7e3vKxMRU1PU1NQ8PDwAAAD///8e3iyFAAAAAXRSTlMAQObYZgAAAPpJREFUeAFjYBgFo2AUjIJRMApU0UQjEkiRILUFFBGhIpaCgVBAU8lAENQ0OaCgVBAU8lAENQ0OaCgVBAU8lAENQ0OaCgVBAU8lAENQ0ObAJAaXx7z0XZTAAAAAElFTkSuQmCC';
-
 let items=[];
 
+// Функции для работы с добавлением товаров
 function showAddItemForm() {
   document.getElementById('additionalItemForm').style.display='block';
   document.getElementById('extraServiceName').value='';
@@ -211,18 +208,11 @@ function addItem() {
   const quantity = document.getElementById('extraQuantity').value;
   const unit = document.getElementById('extraUnit').value;
   const amount = document.getElementById('extraAmount').value;
-
   if(!name || !quantity || !amount){
     alert('Пожалуйста, заполните все поля для товара/услуги.');
     return;
   }
-
-  items.push({
-    serviceName: name,
-    quantity: quantity,
-    unit: unit,
-    amount: amount
-  });
+  items.push({ serviceName: name, quantity: quantity, unit: unit, amount: amount });
   updateItemsTable();
   document.getElementById('additionalItemForm').style.display='none';
   updatePreview();
@@ -329,6 +319,7 @@ function getAllItems() {
   return allItems;
 }
 
+// Функция для генерации контента для PDF (убрать paddings и margin сверху)
 function buildFullContent(data, items) {
   const totalAmount= items.reduce((sum, item) => sum + Number(item.amount || 0), 0);
   const discountPercent=5;
@@ -361,18 +352,29 @@ function buildFullContent(data, items) {
   const totalSumDisplay = isDiscountApplied ? totalWithDiscount.toFixed(2) : totalAmount.toFixed(2);
 
   return `
-<div style="padding:30px;">
-  <div style="width:50%; display:flex; align-items:center;">
-    <img src="${machineBase64}" alt="Машинка" style="width:150px; height:auto;">
-  </div>
-  <div>
-    <p style="margin:0;">АКТ № 1 ОТ ${data.day} ${data.monthLong} ${data.year} г.</p>
-    <p style="margin:0;">Исполнитель ИП Михайлов Александр Андреевич<br>
-    ИНН 590613985887 ОГРНИП 305590609000010 тел.271-81-41</p>
-  </div>
+<div style="padding:0 30px">
+  <!-- Начинается с верха, без внутренних отступов -->
+     <div style="display:flex;justify-content: space-between;align-items:center; ">
+
+      
+          <div>
+            <p style="margin:0;">АКТ № 1 ОТ ${data.day} ${data.monthLong} ${data.year} г.</p>
+            <p style="margin:0;">Исполнитель ИП Михайлов Александр Андреевич<br>
+            ИНН 590613985887 ОГРНИП 305590609000010 тел.271-81-41</p>
+      
+          </div>
+
+          <p>
+              ☎ 8 342 246 12 09<br>
+              ☎ 8 342 271 81 41<br>
+              ✉ Samosvalchikf@gmail.com<br>
+              🌐 samosvalchik.rf
+          </p>
+      </div>
+
 
   <!-- Таблица товаров -->
-  <div style="margin-top:10px;">
+  <div style="style="margin-top:10px;">
     <table style="width:100%; border-collapse: collapse;" border="1" cellpadding="5" cellspacing="0">
       <thead>
         <tr>
@@ -390,44 +392,53 @@ function buildFullContent(data, items) {
     </table>
   </div>
 
-  <!-- Итоговые суммы -->
+  <!-- Итог -->
   <p>Общая сумма без скидки и НДС: <u>${totalAmount.toFixed(2)}</u> руб.</p>
   <p>ИТОГ: <u>${totalSumDisplay}</u> руб.</p>
 
   <p>Вышеперечисленные услуги выполнены полностью и в срок. Заказчик претензий по объему, качеству и срокам оказания услуг не имеет.</p>
 
-  <!-- Подписи -->
-  <div style="display:flex; justify-content: space-between; margin-top:50px; width:100%; ">
-    <div style="width:45%; text-align:center;">
-      <div style="border-top:1px solid #000; margin-top:50px;">&nbsp;</div>
-      <div>ВОДИТЕЛЬ, ИСПОЛНИТЕЛЬ, ЛОГИСТ</div>
+
+
+  <div style="display:flex; justify-content: space-between; margin-top:20px; width:100%;">
+    <div style="width:45%; display:flex;">
+      <div>ВОДИТЕЛЬ <br>ИСПОЛНИТЕЛЬ  <br> ЛОГИСТ</div>
+      <div style="border-top:1px solid #000; margin-top:10px;width:120%">&nbsp;</div>
+      
     </div>
     <div style="width:45%; text-align:center;">
-      <div style="border-top:1px solid #000; margin-top:50px;">&nbsp;</div>
+      <div style="border-top:1px solid #000; margin-top:10px;">&nbsp;</div>
       <div>ЗАКАЗЧИК</div>
     </div>
   </div>
 
-  <!-- Важная часть, которая раньше не отображалась -->
   <p style="margin-top:10px;">*Просим ответить на вопрос:</p>
-  <p>Откуда узнали о нашей компании?</p>
-  <p>__________________________________________________</p>
+  
+  <div style="display:flex">
+      <div>Откуда узнали о нашей компании?</div>
+      <div>__________________________________________________</div>
+  </div>
 
-  <p style="margin-top:10px;">Перевод  8- 908-271-81-41 Александр Андреевич М.( Сбербанк)</p>
+  <p style="margin-top:10px;">Перевод 8-908-271-81-41 Александр Андреевич М.(Сбербанк)</p>
 </div>
+<div style="padding:0 30px">
+  
+  <!-- Начинается с верха, без внутренних отступов -->
+  
+ <div>_______________________________________________________________________________________________</div>
+      
+          <div>
+            <p style="margin:10;">АКТ № 1 ОТ ${data.day} ${data.monthLong} ${data.year} г.</p>
+            <p style="margin:0;">Исполнитель ИП Михайлов Александр Андреевич<br>
+            ИНН 590613985887 ОГРНИП 305590609000010 тел.271-81-41</p>
+      
+          </div>
 
-<div style="padding:30px;">
-  <div style="width:50%; display:flex; align-items:center;">
-    <img src="${machineBase64}" alt="Машинка" style="width:150px; height:auto;">
-  </div>
-  <div>
-    <p style="margin:0;">АКТ № 1 ОТ ${data.day} ${data.monthLong} ${data.year} г.</p>
-    <p style="margin:0;">Исполнитель ИП Михайлов Александр Андреевич<br>
-    ИНН 590613985887 ОГРНИП 305590609000010 тел.271-81-41</p>
-  </div>
+      
+
 
   <!-- Таблица товаров -->
-  <div style="margin-top:10px;">
+  <div style="style="margin-top:10px;">
     <table style="width:100%; border-collapse: collapse;" border="1" cellpadding="5" cellspacing="0">
       <thead>
         <tr>
@@ -445,72 +456,91 @@ function buildFullContent(data, items) {
     </table>
   </div>
 
-  <!-- Итоговые суммы -->
+  <!-- Итог -->
   <p>Общая сумма без скидки и НДС: <u>${totalAmount.toFixed(2)}</u> руб.</p>
   <p>ИТОГ: <u>${totalSumDisplay}</u> руб.</p>
 
   <p>Вышеперечисленные услуги выполнены полностью и в срок. Заказчик претензий по объему, качеству и срокам оказания услуг не имеет.</p>
 
-  <!-- Подписи -->
-  <div style="display:flex; justify-content: space-between; margin-top:50px; width:100%; ">
-    <div style="width:45%; text-align:center;">
-      <div style="border-top:1px solid #000; margin-top:50px;">&nbsp;</div>
-      <div>ВОДИТЕЛЬ, ИСПОЛНИТЕЛЬ, ЛОГИСТ</div>
+
+
+  <div style="display:flex; justify-content: space-between; margin-top:20px; width:100%;">
+    <div style="width:45%; display:flex;">
+      <div>ВОДИТЕЛЬ <br>ИСПОЛНИТЕЛЬ  <br> ЛОГИСТ</div>
+      <div style="border-top:1px solid #000; margin-top:10px;width:120%">&nbsp;</div>
+      
     </div>
     <div style="width:45%; text-align:center;">
-      <div style="border-top:1px solid #000; margin-top:50px;">&nbsp;</div>
+      <div style="border-top:1px solid #000; margin-top:10px;">&nbsp;</div>
       <div>ЗАКАЗЧИК</div>
     </div>
   </div>
 
-  <!-- Важная часть, которая раньше не отображалась -->
-  <p style="margin-top:10px;">*Просим ответить на вопрос:</p>
-  <p>Откуда узнали о нашей компании?</p>
-  <p>__________________________________________________</p>
+  
 
-  <p style="margin-top:10px;">Перевод  8- 908-271-81-41 Александр Андреевич М.( Сбербанк)</p>
+  <p style="margin-top:10px;">Перевод 8-908-271-81-41 Александр Андреевич М.(Сбербанк)</p>
 </div>
 `;
 }
 
-// Функции для работы с добавлением товаров
-function showAddItemForm() {
-  document.getElementById('additionalItemForm').style.display='block';
-  document.getElementById('extraServiceName').value='';
-  document.getElementById('extraQuantity').value='';
-  document.getElementById('extraUnit').value='т';
-  document.getElementById('extraAmount').value='';
-}
+function getFormData() {
+  const serviceName = document.getElementById('serviceName').value.trim();
+  const dateInput = document.getElementById('date').value;
+  const quantity = document.getElementById('quantity').value;
+  const unit = document.getElementById('unit').value;
+  const amount = document.getElementById('amount').value;
+  const customer = document.getElementById('customer').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const customerPhone = document.getElementById('customerPhone').value.trim();
 
-function addItem() {
-  const name = document.getElementById('extraServiceName').value.trim();
-  const quantity = document.getElementById('extraQuantity').value;
-  const unit = document.getElementById('extraUnit').value;
-  const amount = document.getElementById('extraAmount').value;
-  if(!name || !quantity || !amount){
-    alert('Пожалуйста, заполните все поля для товара/услуги.');
-    return;
+  const dateObj = new Date(dateInput);
+  if (isNaN(dateObj)) {
+    alert('Пожалуйста, выберите правильную дату.');
+    return null;
   }
-  items.push({ serviceName: name, quantity: quantity, unit: unit, amount: amount });
-  updateItemsTable();
-  document.getElementById('additionalItemForm').style.display='none';
-  updatePreview();
+
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const formattedDate = dateObj.toLocaleDateString('ru-RU', options);
+  const day = dateObj.getDate();
+  const monthLong = dateObj.toLocaleString('ru-RU', { month: 'long' });
+  const year = dateObj.getFullYear();
+
+  return {
+    serviceName,
+    dateObj,
+    formattedDate,
+    day,
+    monthLong,
+    year,
+    quantity,
+    unit,
+    amount,
+    customer,
+    address,
+    customerPhone
+  };
 }
 
-// Функция для скачивания PDF с улучшенным качеством
-function downloadPdf() {
-  const data = getFormData();
-  if (!data) return;
-  const allItems = getAllItems();
-  const content = buildFullContent(data, allItems);
-  const el = document.createElement('div');
-  el.innerHTML = content;
-  html2pdf().set({
-    html2canvas: { scale: 2, dpi: 300, useCORS: true }
-  }).from(el).save(`Акт_${data.formattedDate}.pdf`);
+function getAllItems() {
+  const mainServiceName = document.getElementById('serviceName').value.trim();
+  const mainQuantity = document.getElementById('quantity').value;
+  const mainUnit = document.getElementById('unit').value;
+  const mainAmount = document.getElementById('amount').value;
+
+  const allItems = [];
+  if (mainServiceName) {
+    allItems.push({
+      serviceName: mainServiceName,
+      quantity: mainQuantity,
+      unit: mainUnit,
+      amount: mainAmount
+    });
+  }
+  allItems.push(...items);
+  return allItems;
 }
 
-// Обновление предпросмотра с высоким качеством
+// Функция для предпросмотра и скачивания PDF
 function updatePreview() {
   const data = getFormData();
   if (!data) return;
@@ -518,14 +548,13 @@ function updatePreview() {
 
   const content = buildFullContent(data, allItems);
   const container = document.getElementById('pdfPreview');
-  container.innerHTML='';
+  container.innerHTML = '';
 
   const el = document.createElement('div');
   el.innerHTML = content;
 
-  // Используем более точные параметры для одинакового отображения
   const options = {
-    margin: 0, // Убираем отступы, чтобы контент начинался с верхней границы
+    margin: 0,
     html2canvas: { scale: 2, dpi: 300, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
@@ -534,15 +563,28 @@ function updatePreview() {
     const url = URL.createObjectURL(pdfBlob);
     const iframe = document.createElement('iframe');
     iframe.src = url;
-    iframe.style.width='100%';
-    iframe.style.height='80vh';
-    iframe.style.border='none';
-    container.innerHTML='';
+    iframe.style.width = '100%';
+    iframe.style.height = '80vh';
+    iframe.style.border = 'none';
+    container.innerHTML = '';
     container.appendChild(iframe);
-  }).catch(function(error){
+  }).catch(function(error) {
     console.error('Ошибка при создании PDF:', error);
     alert('Не удалось подготовить предпросмотр PDF. Попробуйте еще раз.');
   });
+}
+
+function downloadPdf() {
+  const data = getFormData();
+  if (!data) return;
+  const allItems = getAllItems();
+  const content = buildFullContent(data, allItems);
+  const el = document.createElement('div');
+  el.innerHTML = content;
+  html2pdf().set({
+    margin: 0,
+    html2canvas: { scale: 2, dpi: 300, useCORS: true }
+  }).from(el).save(`Акт_${data.formattedDate}.pdf`);
 }
 </script>
 </body>
