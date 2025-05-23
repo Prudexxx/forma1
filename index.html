@@ -523,9 +523,9 @@ function updatePreview() {
   const el = document.createElement('div');
   el.innerHTML = content;
 
-  // Используем более точные параметры
+  // Используем более точные параметры для одинакового отображения
   const options = {
-    margin: 10,
+    margin: 0, // Убираем отступы, чтобы контент начинался с верхней границы
     html2canvas: { scale: 2, dpi: 300, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
